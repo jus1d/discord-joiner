@@ -181,7 +181,7 @@ func joinGuild(inviteCode string, token string) {
 
 }
 
-func start_joiner() {
+func main() {
 
 	color.Blue("Welcome to Discord Mass Joiner utility!")
 
@@ -230,8 +230,4 @@ func start_joiner() {
 	fmt.Println(cyan("|  INFO   |:"), "Press ENTER to EXIT")
 	bufio.NewReader(os.Stdin).ReadBytes('\n')
 
-}
-
-func main() {
-	start_joiner()
 }
