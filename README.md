@@ -1,1 +1,1 @@
-# discord-inviter
+# Discord Mass Joiner
