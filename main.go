@@ -176,7 +176,7 @@ func joinGuild(inviteCode string, token string) {
 	}
 
 	if response.StatusCode != 200 {
-		fmt.Println(red("|  ERROR  |:"), "Unexpected Status code %v while joining token %v", response.StatusCode, token)
+		fmt.Println(red("|  ERROR  |:"), "Unexpected status code %v while joining token %v", response.StatusCode, token)
 	}
 
 }
