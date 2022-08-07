@@ -193,16 +193,14 @@ func main() {
 	fmt.Printf("%s Enter server invite code ( not the link, https://discord.gg/code_here ) -> ", magenta("|   SET   |:"))
 	fmt.Scanln(&code)
 
-	/*
-		var delay int
-		fmt.Printf("%s Enter delay between joining in seconds -> ", magenta("|   SET   |:"))
-		fmt.Scanln(&delay)
+	var delay int
+	fmt.Printf("%s Enter delay between joining in seconds ( Zero by default, just press ENTER ) -> ", magenta("|   SET   |:"))
+	fmt.Scanln(&delay)
 
-		if delay < 0 {
-			fmt.Println(red("|  ERROR  |:"), "Please enter a valid delay")
-			return
-		}
-	*/
+	if delay < 0 {
+		fmt.Println(red("|  ERROR  |:"), "Please enter a valid delay")
+		return
+	}
 
 	lines, err := readLines("tokens.txt")
 
