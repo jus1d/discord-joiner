@@ -218,7 +218,7 @@ func main() {
 
 	for i := 0; i < len(lines); i++ {
 		time.Sleep(5 * time.Millisecond)
-		time.Sleep(time.Duration(delay) * time.Second)
+		// time.Sleep(time.Duration(delay) * time.Second)
 		go func(i int) {
 			defer wg.Done()
 			joinGuild(code, lines[i])
