@@ -50,6 +50,22 @@ func token_format(token string) string {
 	return string(token[0:6]) + "..." + string(token[(len(token)-6):])
 }
 
+func invite_code_format(link string) string {
+	var code string
+
+	if len(link) < 11 {
+		code = link
+	} else if link[0:19] == "https://discord.gg/" {
+		code = link[19:]
+	} else if link[0:11] == "discord.gg/" {
+		code = link[11:]
+	} else {
+		code = link
+	}
+
+	return code
+}
+
 func getFingerprint() string {
 
 	log.SetOutput(ioutil.Discard)
@@ -171,12 +187,19 @@ func joinGuild(inviteCode string, token string) {
 	}
 
 	if response.StatusCode == 200 {
-		fmt.Println(green("| SUCCESS |:"), "Succesfully joined guild")
 		fmt.Println(green("| SUCCESS |:"), "User with token", token_format(token), "succesfully joined the guild")
-	}
-
-	if response.StatusCode != 200 {
-		fmt.Println(red("|  ERROR  |:"), "Unexpected status code %v while joining token %v", response.StatusCode, token)
+	} else if response.StatusCode == 400 {
+		fmt.Println(green("|  ERROR  |:"), "Bad request. Token:", token_format(token))
+	} else if response.StatusCode == 401 {
+		fmt.Println(green("|  ERROR  |:"), "The authorization header was missing or invalid. Token:", token_format(token))
+	} else if response.StatusCode == 403 {
+		fmt.Println(green("|  ERROR  |:"), "The authorization token you passed did not have permission to the resource. Token:", token_format(token))
+	} else if response.StatusCode == 404 {
+		fmt.Println(green("|  ERROR  |:"), "The resource at the location specified doesn't exist. Token:", token_format(token), "Invite code:", inviteCode)
+	} else if response.StatusCode == 429 {
+		fmt.Println(green("|  ERROR  |:"), "Rate limited. Token:", token_format(token))
+	} else {
+		fmt.Println(red("|  ERROR  |:"), "Unexpected status code", response.StatusCode, "while joining token", token_format(token))
 	}
 
 }
@@ -190,22 +213,23 @@ func main() {
 	cyan := color.New(color.FgCyan).SprintFunc()
 
 	var code string
-	fmt.Printf("%s Enter server invite code ( not the link, https://discord.gg/code_here ) -> ", magenta("|   SET   |:"))
+	fmt.Printf("%s Enter server invite link or code -> ", magenta("|   SET   |:"))
 	fmt.Scanln(&code)
+
+	code = invite_code_format(code)
 
 	var delay int
 	fmt.Printf("%s Enter delay between joining in seconds ( Zero by default, just press ENTER ) -> ", magenta("|   SET   |:"))
 	fmt.Scanln(&delay)
 
 	if delay < 0 {
-		fmt.Println(red("|  ERROR  |:"), "Please enter a valid delay")
-		return
+		fmt.Println(red("|  ERROR  |:"), "You entered delay less than 0, zero delay will be applied")
 	}
 
 	lines, err := readLines("tokens.txt")
 
 	if err != nil {
-		fmt.Println(red("|  ERROR  |:"), "Error while reading tokens.txt: %v", err)
+		fmt.Println(red("|  ERROR  |:"), "Error while reading tokens.txt:", err)
 		return
 	}
 
@@ -216,7 +240,7 @@ func main() {
 
 	for i := 0; i < len(lines); i++ {
 		time.Sleep(5 * time.Millisecond)
-		// time.Sleep(time.Duration(delay) * time.Second)
+		time.Sleep(time.Duration(delay) * time.Second)
 		go func(i int) {
 			defer wg.Done()
 			joinGuild(code, lines[i])
