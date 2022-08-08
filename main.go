@@ -127,7 +127,7 @@ func getCookie() cookie {
 	red := color.New(color.FgRed).SprintFunc()
 
 	if error != nil {
-		fmt.Println(red("|  ERROR  |:"), "Error while getting cookies %v", error)
+		fmt.Println(red("|  ERROR  |:"), "Error while getting cookies", error)
 		CookieNil := cookie{}
 		return CookieNil
 	}
@@ -173,7 +173,7 @@ func joinGuild(inviteCode string, token string) {
 	request, error := http.NewRequest("POST", url, bytes.NewReader(requestBytes))
 
 	if error != nil {
-		fmt.Println(red("|  ERROR  |:"), "Error while creating request")
+		fmt.Println(red("|  ERROR  |:"), "Error while creating HTTP request")
 	}
 
 	request.Header.Set("cookie", Cookies)
@@ -183,7 +183,7 @@ func joinGuild(inviteCode string, token string) {
 	response, error := httpClient.Do(commonHeaders(request))
 
 	if error != nil {
-		fmt.Println(red("|  ERROR  |:"), "Error while sending request")
+		fmt.Println(red("|  ERROR  |:"), "Error while sending HTTP request")
 	}
 
 	if response.StatusCode == 200 {
@@ -223,7 +223,7 @@ func main() {
 	fmt.Scanln(&delay)
 
 	if delay < 0 {
-		fmt.Println(red("|  ERROR  |:"), "You entered delay less than 0, zero delay will be applied")
+		fmt.Println(red("|  ERROR  |:"), "You entered invalid delay, zero delay will be applied")
 	}
 
 	lines, err := readLines("tokens.txt")
@@ -250,7 +250,7 @@ func main() {
 	wg.Wait()
 	elapsed := time.Since(start).Seconds()
 
-	fmt.Println(cyan("|  INFO   |:"), "Joining took ", elapsed, "seconds")
+	fmt.Println(cyan("|  INFO   |:"), "Joining the server took ", elapsed, "seconds")
 	fmt.Println(cyan("|  INFO   |:"), "Press ENTER to EXIT")
 	bufio.NewReader(os.Stdin).ReadBytes('\n')
 
