@@ -189,15 +189,15 @@ func joinGuild(inviteCode string, token string) {
 	if response.StatusCode == 200 {
 		fmt.Println(green("| SUCCESS |:"), "User with token", token_format(token), "succesfully joined the guild")
 	} else if response.StatusCode == 400 {
-		fmt.Println(green("|  ERROR  |:"), "Bad request. Token:", token_format(token))
+		fmt.Println(red("|  ERROR  |:"), "Bad request. Token:", token_format(token))
 	} else if response.StatusCode == 401 {
-		fmt.Println(green("|  ERROR  |:"), "The authorization header was missing or invalid. Token:", token_format(token))
+		fmt.Println(red("|  ERROR  |:"), "The authorization header was missing or invalid. Token:", token_format(token))
 	} else if response.StatusCode == 403 {
-		fmt.Println(green("|  ERROR  |:"), "The authorization token you passed did not have permission to the resource. Token:", token_format(token))
+		fmt.Println(red("|  ERROR  |:"), "The authorization token you passed did not have permission to the resource. Token:", token_format(token))
 	} else if response.StatusCode == 404 {
-		fmt.Println(green("|  ERROR  |:"), "The resource at the location specified doesn't exist. Token:", token_format(token), "Invite code:", inviteCode)
+		fmt.Println(red("|  ERROR  |:"), "The resource at the location specified doesn't exist. Token:", token_format(token), "Invite code:", inviteCode)
 	} else if response.StatusCode == 429 {
-		fmt.Println(green("|  ERROR  |:"), "Rate limited. Token:", token_format(token))
+		fmt.Println(red("|  ERROR  |:"), "Rate limited. Token:", token_format(token))
 	} else {
 		fmt.Println(red("|  ERROR  |:"), "Unexpected status code", response.StatusCode, "while joining token", token_format(token))
 	}
