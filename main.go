@@ -228,6 +228,23 @@ func main() {
 
 	lines, err := readLines("tokens.txt")
 
+	var max int
+	fmt.Printf("%s Enter how many accounts you want to invite ( Press ENTER to invite all ) -> ", magenta("|   SET   |:"))
+	fmt.Scanln(&max)
+
+	if max != 0 {
+		var new_lines []string
+
+		if max > len(lines) {
+			max = len(lines)
+		}
+
+		for i := 0; i < max; i++ {
+			new_lines = append(new_lines, lines[i])
+		}
+		lines = new_lines
+	}
+
 	if err != nil {
 		fmt.Println(red("|  ERROR  |:"), "Error while reading tokens.txt:", err)
 		return
