@@ -43,26 +43,6 @@ jobs:
     # Run build of the application
     - name: Run build
       run: go build . 
-      
-    # Run vet & lint on the code
-    - name: Run vet & lint
-      run: |
-        go vet .
-        golint .
-    
-    # Run testing on the code
-    - name: Run testing
-      run: cd test && go test -v
-    
-    # Send slack notification
-    - name: Send slack notification
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        fields: repo,message,commit,author,action,eventName,ref,workflow,job,took # selectable (default: repo,message)
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-      if: always() # Pick up events even if the job fails or is canceled.
 
   # The "deploy" workflow
   deploy:
